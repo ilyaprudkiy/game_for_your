@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_for_you_app/ui/widgets/loader_screen/loader_view_cubit.dart';
-import 'package:game_for_you_app/ui/widgets/main_screen/users.screen.dart';
+import 'package:game_for_you_app/ui/navigation/main_navigation.dart';
+import 'package:game_for_you_app/ui/widgets/loader_screen/cubit/loader_view_cubit.dart';
 import 'package:provider/provider.dart';
+import '../../../constant/color.dart';
+import '../../../constant/style.dart';
 import '../elements/radial_percent_widget.dart';
 
 class LoaderWidget extends StatefulWidget {
@@ -16,7 +18,7 @@ class _LoaderWidgetState extends State<LoaderWidget> {
   @override
   void initState() {
     super.initState();
-    context.read<LoaderViewCubit>().progressLoadDate();
+    context.read<LoaderViewCubit>().startLoading();
   }
 
   @override
@@ -24,9 +26,9 @@ class _LoaderWidgetState extends State<LoaderWidget> {
     final cubit = context.watch<LoaderViewCubit>();
     return BlocListener<LoaderViewCubit, LoaderViewCubitState>(
         listener: (context, percent) {
-          if (cubit.state.currentPercent <= 100) {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => UsersScreenWidget()));
+          if (cubit.state.currentPercent == 100) {
+            Navigator.of(context)
+                .pushNamed(MainNavigationRouteNames.usersScreen);
           }
         },
         child: Scaffold(
@@ -39,42 +41,37 @@ class _LoaderWidgetState extends State<LoaderWidget> {
                     fit: BoxFit.cover),
               ),
               child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 65),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 65),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Padding(
+                      Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             'Games for you',
-                            style: TextStyle(
-                              letterSpacing: 10,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 40,
-                              color: Colors.white,
-                            ),
+                            style: Styles.textLoaderWidget,
                           )),
                       Padding(
-                          padding: EdgeInsets.symmetric(vertical: 40),
+                          padding: const EdgeInsets.symmetric(vertical: 40),
                           child: SizedBox(
                             height: 150,
                             width: 150,
                             child: RadialPercentWidget(
-                              fillColor: Color.fromRGBO(127, 117, 174, 0),
+                              fillColor: AspinsColors.fillColor,
                               percent: cubit.state.currentPercent / 100,
-                              lineColor: Color.fromRGBO(240, 117, 195, 9),
+                              lineColor: AspinsColors.lineColor,
                               lineWidth: 10,
-                              freeColor: Color.fromRGBO(68, 76, 117, 1),
+                              freeColor: AspinsColors.freeColor,
                               child: BlocBuilder<LoaderViewCubit,
                                       LoaderViewCubitState>(
                                   builder: (context, percent) {
-                                    final percent = cubit.state.currentPercent.toString();
+                                final percent =
+                                    cubit.state.currentPercent.toString();
                                 return Text(
                                   '$percent%',
-
-                                  style: const TextStyle(
-                                      fontSize: 35, color: Colors.white),
+                                  style: Styles.textPercent,
                                 );
                               }),
                             ),

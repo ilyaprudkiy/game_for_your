@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../domain/factory/screen_factory.dart';
 
 abstract class MainNavigationRouteNames {

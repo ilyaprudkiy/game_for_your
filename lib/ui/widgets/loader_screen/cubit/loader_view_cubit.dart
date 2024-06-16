@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 class LoaderViewCubitState {
@@ -27,13 +29,19 @@ class LoaderViewCubitState {
 }
 
 class LoaderViewCubit extends Cubit<LoaderViewCubitState> {
+  late Timer _timer;
+
   LoaderViewCubit(super.initialState);
 
-  Future<void> progressLoadDate() async {
-    while (state.currentPercent < 100) {
-      await Future.delayed(const Duration(milliseconds: 20));
-      final newState =  state.copyWith(currentPercent: state.currentPercent + 1);
-      emit(newState);
-    }
+  void startLoading() {
+    const oneSec = Duration(milliseconds: 50);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      final currenPecents = state.currentPercent;
+      if (currenPecents >= 100) {
+        _timer.cancel();
+      } else {
+        emit(state.copyWith(currentPercent: currenPecents + 1));
+      }
+    });
   }
 }

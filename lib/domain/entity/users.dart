@@ -7,15 +7,16 @@ class Users {
   final String name;
   final bool isPro;
   final double price;
-  final String avatar;
+  final String? avatar;
 
-  Users(
-      {required this.name,
-      required this.isPro,
-      required this.price,
-      required this.avatar});
+  Users({
+    required this.name,
+    required this.isPro,
+    required this.price,
+    this.avatar,
+  });
 
-  factory Users.fromJson(Map<String, dynamic> json) =>
-      _$UsersFromJson(json);
+  factory Users.fromJson(Map<String, dynamic> json) => _$UsersFromJson(json);
+
   Map<String, dynamic> toJson() => _$UsersToJson(this);
 }

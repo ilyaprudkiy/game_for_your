@@ -10,7 +10,7 @@ Users _$UsersFromJson(Map<String, dynamic> json) => Users(
       name: json['name'] as String,
       isPro: json['isPro'] as bool,
       price: (json['price'] as num).toDouble(),
-      avatar: json['avatar'] as String,
+      avatar: json['avatar'] as String?,
     );
 
 Map<String, dynamic> _$UsersToJson(Users instance) => <String, dynamic>{
